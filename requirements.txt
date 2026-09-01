@@ -9,4 +9,4 @@ Jinja2==3.1.5
 crowd-kit
 loguru
 openai
-gpt2giga 
+gpt2giga

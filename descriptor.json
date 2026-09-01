@@ -19,10 +19,10 @@
             "name": "test_data",
             "label": "test_data",
             "in": true,
-            "type": "default",
-            "shape": "shape_model",
+            "type": "dataframe",
+            "shape": "shape_dataframe",
             "required": false,
-            "description": "Test data as DataFrame, JSON string, or dict",
+            "description": "Эталонная корзина reference_umr как DataFrame",
             "order": 2
         },
         {
@@ -39,7 +39,7 @@
             "label": "extracted_fields",
             "in": false,
             "type": "default",
-            "shape": "shape_parameter",
+            "shape": "shape_model",
             "description": "Извлечённые структурированные поля: summary, key_points, generation_hyperparams, sample_description, ml_architecture",
             "order": 4
         }
@@ -57,7 +57,34 @@
                 "requirements.txt"
             ],
             "sourceFiles": [
-                "src/main.py"
+                "src/main.py",
+                "src/config_gpt2giga.py",
+                "src/report_browser.py",
+                "src/bp_info.py",
+                "src/prompts.py",
+                "src/parsing/__init__.py",
+                "src/parsing/parser.py",
+                "src/parsing/parse_docx_with_sections.py",
+                "src/parsing/parse_pdf_with_sections.py",
+                "src/parsing/parse_xlsx_with_sections.py",
+                "src/agents/__init__.py",
+                "src/agents/config.py",
+                "src/agents/extraction_agent.py",
+                "src/agents/extractors/__init__.py",
+                "src/agents/extractors/hyperparams_extractor.py",
+                "src/agents/extractors/key_points_extractor.py",
+                "src/agents/extractors/ml_architecture_extractor.py",
+                "src/agents/extractors/sample_extractor.py",
+                "src/agents/extractors/summary_generator.py",
+                "src/agents/prompts/__init__.py",
+                "src/agents/prompts/hyperparams.py",
+                "src/agents/prompts/key_points.py",
+                "src/agents/prompts/ml_architecture.py",
+                "src/agents/prompts/sample.py",
+                "src/agents/prompts/summary.py",
+                "src/utils/__init__.py",
+                "src/utils/llm_logging.py",
+                "src/metadata/task_types.json"
             ],
             "functionName": "main",
             "functionParameters": []

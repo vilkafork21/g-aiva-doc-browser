@@ -78,15 +78,24 @@ def call_llm_structured(
     max_tokens: int = 2048,
 ) -> BaseModel:
     """Вызывает LLM и парсит JSON-ответ в указанную Pydantic-схему."""
+    schema_payload = schema.model_json_schema()
     messages = [
-        {"role": "system", "content": system_prompt},
+        {
+            "role": "system",
+            "content": (
+                f"{system_prompt}\n\n"
+                "Верни только валидный JSON без Markdown и пояснений, строго "
+                "соответствующий JSON Schema:\n"
+                f"{json.dumps(schema_payload, ensure_ascii=False)}"
+            ),
+        },
         {"role": "user", "content": user_content},
     ]
     response_format = {
         "type": "json_schema",
         "json_schema": {
             "name": schema.__name__,
-            "schema": schema.model_json_schema(),
+            "schema": schema_payload,
         },
     }
     response = call_llm_with_retry(

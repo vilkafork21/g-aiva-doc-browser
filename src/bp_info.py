@@ -217,8 +217,12 @@ def _call_llm_with_json(
     if not raw:
         raise ValueError("LLM returned empty response")
 
+    cleaned = raw.strip()
+    if cleaned.startswith("```") and cleaned.endswith("```"):
+        cleaned = cleaned.split("\n", 1)[-1][:-3].strip()
+
     try:
-        data = json.loads(raw)
+        data = json.loads(cleaned)
     except json.JSONDecodeError as e:
         raise ValueError(
             f"Failed to parse JSON from LLM response: {raw}") from e
