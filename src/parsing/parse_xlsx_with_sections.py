@@ -97,7 +97,7 @@ class DocumentSection:
         results = []
         try:
             regex = re.compile(pattern, re.IGNORECASE)
-        except re.error as e:
+        except re.error:
             return results
         if regex.search(self.title) or regex.search(self.get_full_text()):
             results.append(self.to_dict())
@@ -265,7 +265,7 @@ def parse_xlsx_to_sections(file_path: str) -> DocumentSection:
 
     try:
         workbook = openpyxl.load_workbook(file_path, data_only=True)
-    except Exception as e:
+    except Exception:
         raise
 
     for sheet in workbook.worksheets:

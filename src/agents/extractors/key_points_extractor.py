@@ -8,7 +8,7 @@ import json
 import time
 import logging
 from pathlib import Path
-from typing import Optional, Dict
+from typing import Dict
 
 from openai import OpenAI
 from pydantic import BaseModel, Field

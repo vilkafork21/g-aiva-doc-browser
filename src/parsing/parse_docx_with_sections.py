@@ -445,7 +445,7 @@ def _parse_docx_sections(doc: "docx.Document") -> DocumentSection:
 def parse_docx_to_sections(file_path: str) -> DocumentSection:
     try:
         doc = docx.Document(file_path)
-    except Exception as e:
+    except Exception:
         raise
     return _parse_docx_sections(doc)
 
