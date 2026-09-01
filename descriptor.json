@@ -1,0 +1,146 @@
+{
+    "id": "86035fe4-1d38-4e5a-84ce-f877fb234039",
+    "name": "Получение карточки бизнес-процесса",
+    "description": "Агрегирует информацию из отчета о разработке в карточку бизнес-процесса",
+    "fullDescription": "FOR MORE DETAILS VIEW README.md",
+    "moduleType": "test",
+    "ports": [
+        {
+            "name": "report_dict",
+            "label": "report_dict",
+            "in": true,
+            "type": "default",
+            "shape": "shape_model",
+            "required": true,
+            "description": "Pickle with elements of the report",
+            "order": 1
+        },
+        {
+            "name": "test_data",
+            "label": "test_data",
+            "in": true,
+            "type": "default",
+            "shape": "shape_model",
+            "required": false,
+            "description": "Test data as DataFrame, JSON string, or dict",
+            "order": 2
+        },
+        {
+            "name": "all_results",
+            "label": "all_results",
+            "in": false,
+            "type": "default",
+            "shape": "shape_model",
+            "description": "Text with business-process card text",
+            "order": 3
+        },
+        {
+            "name": "extracted_fields",
+            "label": "extracted_fields",
+            "in": false,
+            "type": "default",
+            "shape": "shape_parameter",
+            "description": "Извлечённые структурированные поля: summary, key_points, generation_hyperparams, sample_description, ml_architecture",
+            "order": 4
+        }
+    ],
+    "portsMetadata": {
+        "hasDynamicInputPort": false,
+        "hasDynamicOutputPort": false
+    },
+    "script": {
+        "type": "python",
+        "deployType": "docker",
+        "baseImageKey": "py312-simple",
+        "runConfiguration": {
+            "libraryDependencies": [
+                "requirements.txt"
+            ],
+            "sourceFiles": [
+                "src/main.py"
+            ],
+            "functionName": "main",
+            "functionParameters": []
+        }
+    },
+    "ui": {
+        "settings": [
+            {
+                "page": "General",
+                "title": "General",
+                "components": [
+                    {
+                        "type": "form",
+                        "label": "Model Parameters",
+                        "config": {
+                            "components": [
+                                {
+                                    "parameter": "llm_selector",
+                                    "name": "llm_selector",
+                                    "label": "LLM",
+                                    "type": "string",
+                                    "uiComponent": "input",
+                                    "defaultValue": "GigaChat-3-Ultra"
+                                },
+                                {
+                                    "parameter": "pr_temperature",
+                                    "label": "temperature",
+                                    "uiComponent": "input",
+                                    "type": "float",
+                                    "defaultValue": 0.1
+                                },
+                                {
+                                    "parameter": "pr_top_p",
+                                    "label": "top_p",
+                                    "uiComponent": "input",
+                                    "type": "float",
+                                    "defaultValue": 0.05
+                                },
+                                {
+                                    "parameter": "pr_repetition_penalty",
+                                    "label": "repetition_penalty",
+                                    "uiComponent": "input",
+                                    "type": "float",
+                                    "defaultValue": 1.0
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "type": "form",
+                        "label": "Параметры извлечения полей",
+                        "config": {
+                            "components": [
+                                {
+                                    "parameter": "pr_extraction_model",
+                                    "label": "model",
+                                    "uiComponent": "input",
+                                    "type": "string",
+                                    "defaultValue": "GigaChat-3-Ultra"
+                                },
+                                {
+                                    "parameter": "pr_extraction_temperature",
+                                    "label": "temperature",
+                                    "uiComponent": "input",
+                                    "type": "float",
+                                    "defaultValue": 0.0
+                                },
+                                {
+                                    "parameter": "pr_extraction_max_tokens",
+                                    "label": "max_tokens",
+                                    "uiComponent": "input",
+                                    "type": "int",
+                                    "defaultValue": 16384
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ],
+        "result": {
+            "title": "Results",
+            "components": []
+        }
+    }
+}
