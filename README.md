@@ -138,7 +138,7 @@ WARNING src.agents.extractors.summary_generator: [SummaryGenerator] key_points �
 | `generation_hyperparams` | dict | `{имя: значение}`; пустой, если в отчёте нет |
 | `sample_description` | list | Записи `{split, thema, volume, dates}`; `split` — `train`/`val`/`oos`/`oot` |
 | `ml_architecture` | str | Описание архитектуры свободным текстом |
-| `bp_card_fields` | dict | Все значения — строки: `task_group`, `task_type` (подтипы через `, `), `evaluation_metric`, `metric_desc`, `threshold` (строка числа, например `0.85`), `metric_func` (формула или `-`), `dataset_type` (значение или `-`). Единица наблюдения ноды — один отчёт |
+| `bp_card_fields` | dict | Все значения — строки: `task_group`, `task_type` (подтипы через `, `), `evaluation_metric`, `metric_desc`, `threshold` (строка числа, например `0.85`, либо `-`, если порог не указан), `metric_func` (формула или `-`), `dataset_type` (значение или `-`). Единица наблюдения ноды — один отчёт |
 
 ## Падение против деградации
 
@@ -232,8 +232,7 @@ tests/                          test_main.py (клиент, настройки, 
 
 Зависимости `requirements.txt`: `python-docx==1.1.2`, `pydantic`,
 `pandas==3.0.3`, `openpyxl==3.1.5`, `PyPDF2==3.0.1`, `tabulate==0.9.0`
-(`DataFrame.to_markdown` для типа датасета), `loguru` (кодом не импортируется),
-`openai`, `gpt2giga`. Проверка перед сборкой из корня ноды: `ruff check .` и
+(`DataFrame.to_markdown` для типа датасета), `openai`, `gpt2giga`. Проверка перед сборкой из корня ноды: `ruff check .` и
 `python -m pytest -q` (7 тестов); то же делает GitHub Actions
 (`.github/workflows/ci.yml`, Python 3.12). ZIP для платформы —
 `descriptor.json`, `requirements.txt` и `src/` из ветки `dev` без `.git`,
