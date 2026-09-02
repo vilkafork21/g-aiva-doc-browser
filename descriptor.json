@@ -1,173 +1,152 @@
 {
-    "id": "86035fe4-1d38-4e5a-84ce-f877fb234039",
-    "name": "Получение карточки бизнес-процесса",
-    "description": "Агрегирует информацию из отчета о разработке в карточку бизнес-процесса",
-    "fullDescription": "FOR MORE DETAILS VIEW README.md",
-    "moduleType": "test",
-    "ports": [
-        {
-            "name": "report_dict",
-            "label": "report_dict",
-            "in": true,
-            "type": "default",
-            "shape": "shape_model",
-            "required": true,
-            "description": "Pickle with elements of the report",
-            "order": 1
-        },
-        {
-            "name": "test_data",
-            "label": "test_data",
-            "in": true,
-            "type": "dataframe",
-            "shape": "shape_dataframe",
-            "required": false,
-            "description": "Эталонная корзина reference_umr как DataFrame",
-            "order": 2
-        },
-        {
-            "name": "all_results",
-            "label": "all_results",
-            "in": false,
-            "type": "default",
-            "shape": "shape_model",
-            "description": "Text with business-process card text",
-            "order": 3
-        },
-        {
-            "name": "extracted_fields",
-            "label": "extracted_fields",
-            "in": false,
-            "type": "default",
-            "shape": "shape_model",
-            "description": "Извлечённые структурированные поля: summary, key_points, generation_hyperparams, sample_description, ml_architecture",
-            "order": 4
-        }
-    ],
-    "portsMetadata": {
-        "hasDynamicInputPort": false,
-        "hasDynamicOutputPort": false
+  "id": "86035fe4-1d38-4e5a-84ce-f877fb234039",
+  "name": "Получение карточки бизнес-процесса",
+  "description": "Агрегирует информацию из отчета о разработке в карточку бизнес-процесса",
+  "fullDescription": "FOR MORE DETAILS VIEW README.md",
+  "moduleType": "test",
+  "ports": [
+    {
+      "name": "report_dict",
+      "label": "report_dict",
+      "in": true,
+      "type": "default",
+      "shape": "shape_model",
+      "required": true,
+      "description": "Отчёт о разработке: dict {\"bin\": bytes, \"ext\": \".docx\"} (также .pdf/.xlsx); без bin текст отчёта не читается",
+      "order": 1
     },
-    "script": {
-        "type": "python",
-        "deployType": "docker",
-        "baseImageKey": "py312-simple",
-        "runConfiguration": {
-            "libraryDependencies": [
-                "requirements.txt"
-            ],
-            "sourceFiles": [
-                "src/main.py",
-                "src/config_gpt2giga.py",
-                "src/report_browser.py",
-                "src/bp_info.py",
-                "src/prompts.py",
-                "src/parsing/__init__.py",
-                "src/parsing/parser.py",
-                "src/parsing/parse_docx_with_sections.py",
-                "src/parsing/parse_pdf_with_sections.py",
-                "src/parsing/parse_xlsx_with_sections.py",
-                "src/agents/__init__.py",
-                "src/agents/config.py",
-                "src/agents/extraction_agent.py",
-                "src/agents/extractors/__init__.py",
-                "src/agents/extractors/hyperparams_extractor.py",
-                "src/agents/extractors/key_points_extractor.py",
-                "src/agents/extractors/ml_architecture_extractor.py",
-                "src/agents/extractors/sample_extractor.py",
-                "src/agents/extractors/summary_generator.py",
-                "src/agents/prompts/__init__.py",
-                "src/agents/prompts/hyperparams.py",
-                "src/agents/prompts/key_points.py",
-                "src/agents/prompts/ml_architecture.py",
-                "src/agents/prompts/sample.py",
-                "src/agents/prompts/summary.py",
-                "src/utils/__init__.py",
-                "src/utils/llm_logging.py",
-                "src/metadata/task_types.json"
-            ],
-            "functionName": "main",
-            "functionParameters": []
-        }
+    {
+      "name": "test_data",
+      "label": "test_data",
+      "in": true,
+      "type": "dataframe",
+      "shape": "shape_dataframe",
+      "required": false,
+      "description": "Эталонная корзина reference_umr как DataFrame",
+      "order": 2
     },
-    "ui": {
-        "settings": [
-            {
-                "page": "General",
-                "title": "General",
-                "components": [
-                    {
-                        "type": "form",
-                        "label": "Model Parameters",
-                        "config": {
-                            "components": [
-                                {
-                                    "parameter": "llm_selector",
-                                    "name": "llm_selector",
-                                    "label": "LLM",
-                                    "type": "string",
-                                    "uiComponent": "input",
-                                    "defaultValue": "GigaChat-3-Ultra"
-                                },
-                                {
-                                    "parameter": "pr_temperature",
-                                    "label": "temperature",
-                                    "uiComponent": "input",
-                                    "type": "float",
-                                    "defaultValue": 0.1
-                                },
-                                {
-                                    "parameter": "pr_top_p",
-                                    "label": "top_p",
-                                    "uiComponent": "input",
-                                    "type": "float",
-                                    "defaultValue": 0.05
-                                },
-                                {
-                                    "parameter": "pr_repetition_penalty",
-                                    "label": "repetition_penalty",
-                                    "uiComponent": "input",
-                                    "type": "float",
-                                    "defaultValue": 1.0
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        "type": "form",
-                        "label": "Параметры извлечения полей",
-                        "config": {
-                            "components": [
-                                {
-                                    "parameter": "pr_extraction_model",
-                                    "label": "model",
-                                    "uiComponent": "input",
-                                    "type": "string",
-                                    "defaultValue": "GigaChat-3-Ultra"
-                                },
-                                {
-                                    "parameter": "pr_extraction_temperature",
-                                    "label": "temperature",
-                                    "uiComponent": "input",
-                                    "type": "float",
-                                    "defaultValue": 0.0
-                                },
-                                {
-                                    "parameter": "pr_extraction_max_tokens",
-                                    "label": "max_tokens",
-                                    "uiComponent": "input",
-                                    "type": "int",
-                                    "defaultValue": 16384
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
-        ],
-        "result": {
-            "title": "Results",
-            "components": []
-        }
+    {
+      "name": "all_results",
+      "label": "all_results",
+      "in": false,
+      "type": "default",
+      "shape": "shape_model",
+      "description": "Карточка бизнес-процесса: {\"bp_card\": текст}",
+      "order": 3
+    },
+    {
+      "name": "extracted_fields",
+      "label": "extracted_fields",
+      "in": false,
+      "type": "default",
+      "shape": "shape_model",
+      "description": "Извлечённые поля: title, summary, key_points, generation_hyperparams, sample_description, ml_architecture, bp_card_fields (task_group, task_type, evaluation_metric, metric_desc, threshold, metric_func, dataset_type)",
+      "order": 4
     }
+  ],
+  "portsMetadata": {
+    "hasDynamicInputPort": false,
+    "hasDynamicOutputPort": false
+  },
+  "script": {
+    "type": "python",
+    "deployType": "docker",
+    "baseImageKey": "py312-simple",
+    "runConfiguration": {
+      "libraryDependencies": [
+        "requirements.txt"
+      ],
+      "sourceFiles": [
+        "src/main.py",
+        "src/config_gpt2giga.py",
+        "src/report_browser.py",
+        "src/bp_info.py",
+        "src/prompts.py",
+        "src/parsing/__init__.py",
+        "src/parsing/parser.py",
+        "src/parsing/parse_docx_with_sections.py",
+        "src/parsing/parse_pdf_with_sections.py",
+        "src/parsing/parse_xlsx_with_sections.py",
+        "src/agents/__init__.py",
+        "src/agents/config.py",
+        "src/agents/extraction_agent.py",
+        "src/agents/extractors/__init__.py",
+        "src/agents/extractors/hyperparams_extractor.py",
+        "src/agents/extractors/key_points_extractor.py",
+        "src/agents/extractors/ml_architecture_extractor.py",
+        "src/agents/extractors/sample_extractor.py",
+        "src/agents/extractors/summary_generator.py",
+        "src/agents/prompts/__init__.py",
+        "src/agents/prompts/hyperparams.py",
+        "src/agents/prompts/key_points.py",
+        "src/agents/prompts/ml_architecture.py",
+        "src/agents/prompts/sample.py",
+        "src/agents/prompts/summary.py",
+        "src/utils/__init__.py",
+        "src/utils/llm_logging.py",
+        "src/metadata/task_types.json"
+      ],
+      "functionName": "main",
+      "functionParameters": []
+    }
+  },
+  "ui": {
+    "settings": [
+      {
+        "page": "General",
+        "title": "General",
+        "components": [
+          {
+            "type": "form",
+            "label": "Model Parameters",
+            "config": {
+              "components": [
+                {
+                  "parameter": "llm_selector",
+                  "name": "llm_selector",
+                  "label": "LLM",
+                  "type": "string",
+                  "uiComponent": "input",
+                  "defaultValue": "GigaChat-3-Ultra"
+                }
+              ]
+            }
+          },
+          {
+            "type": "form",
+            "label": "Параметры извлечения полей",
+            "config": {
+              "components": [
+                {
+                  "parameter": "pr_extraction_model",
+                  "label": "model",
+                  "uiComponent": "input",
+                  "type": "string",
+                  "defaultValue": "GigaChat-3-Ultra"
+                },
+                {
+                  "parameter": "pr_extraction_temperature",
+                  "label": "temperature",
+                  "uiComponent": "input",
+                  "type": "float",
+                  "defaultValue": 0.0
+                },
+                {
+                  "parameter": "pr_extraction_max_tokens",
+                  "label": "max_tokens",
+                  "uiComponent": "input",
+                  "type": "int",
+                  "defaultValue": 16384
+                }
+              ]
+            }
+          }
+        ]
+      }
+    ],
+    "result": {
+      "title": "Results",
+      "components": []
+    }
+  }
 }
