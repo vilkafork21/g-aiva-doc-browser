@@ -248,7 +248,7 @@ class MetricInfo(BaseModel):
         ...,
         description="Описание ключевой метрики качества: обоснование выбора; целевые значения; формула вычисления",
     )
-    threshold: float = Field(
+    threshold: Optional[float] = Field(
         ...,
         description="Порог ключевой метрики от Бизнеса (бизнес-заказчика), который необходимо достичь"
     )
@@ -437,7 +437,7 @@ class BusinessProcessInfo:
             'task_type': ', '.join(self.task_type_info.selected_task),
             'evaluation_metric': self.metric_info.evaluation_metric,
             'metric_desc': self.metric_info.metric_desc,
-            'threshold': str(self.metric_info.threshold),
+            'threshold': str(self.metric_info.threshold) if self.metric_info.threshold is not None else '-',
             'metric_func': metric_func or '-',
             'dataset_type': dataset_type,
         }
@@ -500,7 +500,7 @@ class BusinessProcessInfo:
     ### Название
     {self.metric_info.evaluation_metric}
     ### Значение бизнес-метрики, которую необходимо достичь
-    {self.metric_info.threshold}
+    {self.metric_info.threshold if self.metric_info.threshold is not None else '-'}
     ### Описание
     {metric_description}
 """
