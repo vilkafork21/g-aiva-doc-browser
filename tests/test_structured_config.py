@@ -68,3 +68,30 @@ def test_business_process_parser_accepts_json_fence(monkeypatch):
     )
 
     assert result.answer == "ok"
+
+
+def test_metric_parser_accepts_absent_business_threshold(monkeypatch):
+    openai = ModuleType("openai")
+    openai.OpenAI = object
+    openai.RateLimitError = type("RateLimitError", (Exception,), {})
+    openai.APIError = type("APIError", (Exception,), {})
+    monkeypatch.setitem(sys.modules, "openai", openai)
+    bp_info = importlib.import_module("src.bp_info")
+    response = SimpleNamespace(
+        choices=[SimpleNamespace(message=SimpleNamespace(content=(
+            '{"evaluation_metric":"Оценка релевантности",'
+            '"metric_desc":"Оценка ответа",'
+            '"threshold":null,"metric_func":null}'
+        )))]
+    )
+    monkeypatch.setattr(bp_info, "_call_llm_with_retry", lambda **_: response)
+
+    result = bp_info._call_llm_with_json(
+        client=object(),
+        model="test-model",
+        system_prompt="system",
+        user_prompt="user",
+        schema=bp_info.MetricInfo,
+    )
+
+    assert result.threshold is None
